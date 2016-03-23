@@ -38,6 +38,12 @@
                                 <color key="textColor" red="0.60000002379999995" green="0.60000002379999995" blue="0.60000002379999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Udpated March 2016 with Core Data" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DLO-ew-7QR">
+                                <rect key="frame" x="152" y="375" width="296" height="21"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                                <color key="textColor" red="0.80000001190000003" green="0.80000001190000003" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -48,6 +54,8 @@
                             <constraint firstItem="cCz-TT-VUt" firstAttribute="bottom" secondItem="xb3-aO-Qok" secondAttribute="top" id="JxD-1C-CQE"/>
                             <constraint firstItem="cCz-TT-VUt" firstAttribute="centerX" secondItem="Ghc-KG-YML" secondAttribute="centerX" id="WjK-Hf-hFe"/>
                             <constraint firstItem="cCz-TT-VUt" firstAttribute="centerY" secondItem="qht-u2-2hi" secondAttribute="centerY" id="XTM-jh-nOI"/>
+                            <constraint firstItem="DLO-ew-7QR" firstAttribute="centerX" secondItem="Ghc-KG-YML" secondAttribute="centerX" id="aZC-ia-luo"/>
+                            <constraint firstItem="DLO-ew-7QR" firstAttribute="top" secondItem="Ghc-KG-YML" secondAttribute="bottom" constant="8" id="k5y-06-Q4s"/>
                             <constraint firstItem="qht-u2-2hi" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="n3x-ZR-5ai"/>
                             <constraint firstItem="f0Q-4G-sva" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="rK8-1b-hs9"/>
                             <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="f0Q-4G-sva" secondAttribute="bottom" constant="20" id="s0B-CK-qn4"/>
