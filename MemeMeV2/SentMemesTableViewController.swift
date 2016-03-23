@@ -76,7 +76,8 @@ class SentMemesTableViewController: UIViewController, UITableViewDelegate, UITab
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
             
             //updates the saved memes array on the file disk
-            NSKeyedArchiver.archiveRootObject(Memes.sharedInstance.savedMemes, toFile: getMemeFilePath())
+//TODO: Remove archiver stuff below and replace with core data
+            //NSKeyedArchiver.archiveRootObject(Memes.sharedInstance.savedMemes, toFile: getMemeFilePath())
         }
     }
     
@@ -117,9 +118,12 @@ class SentMemesTableViewController: UIViewController, UITableViewDelegate, UITab
         navigationItem.leftBarButtonItem = editButtonItem()
         
         //loads the shared memes array from memes that are saved to the file disk (these memes are saved as part of the saveMeme method in the meme editor)
-        if let memes = NSKeyedUnarchiver.unarchiveObjectWithFile(getMemeFilePath()) as? [MemeObject] {
-            Memes.sharedInstance.savedMemes = memes
-        }
+        
+//TODO: Remove archiver stuff below and replace with core data
+        
+        //if let memes = NSKeyedUnarchiver.unarchiveObjectWithFile(getMemeFilePath()) as? [MemeObject] {
+        //    Memes.sharedInstance.savedMemes = memes
+        //}
         
         //sets title to "" sets both navigation bar title AND tab bar title to ""; subsequently setting navigationItem's title to "Sent Memes" allowed just this title to be shown in the navigation bar (and not under the tab bar icon)
         title = ""

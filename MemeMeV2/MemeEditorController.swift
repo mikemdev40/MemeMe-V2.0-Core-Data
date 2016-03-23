@@ -163,7 +163,8 @@ class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, U
             meme = MemeObject(topText: topText, bottomText: bottomText, originalImagePath: originalImagePath, memedImagePath: memedImagePath, date: date)
             Memes.sharedInstance.savedMemes.insert(meme, atIndex: 0)
 
-            NSKeyedArchiver.archiveRootObject(Memes.sharedInstance.savedMemes, toFile: getMemeFilePath())
+    //TODO: Remove archiver stuff below and replace with core data
+            //NSKeyedArchiver.archiveRootObject(Memes.sharedInstance.savedMemes, toFile: getMemeFilePath())
         }
     }
     //my primary references for storing files to the local disk was lecture 16 of the Stanford iTunes Course (https://itunes.apple.com/us/course/developing-ios-8-apps-swift/id961180099) and https://www.hackingwithswift.com/read/10/4/importing-photos-with-uiimagepickercontroller
