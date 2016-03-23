@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A20381C1CA34E1400292247 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A20381B1CA34E1400292247 /* CoreDataStack.swift */; };
+		7A20381F1CA34F3100292247 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7A20381D1CA34F3100292247 /* Model.xcdatamodeld */; };
 		7A379A9F1C508CA500D5DA91 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A379A9E1C508CA500D5DA91 /* Launch Screen.storyboard */; };
 		7A379AA11C508ED600D5DA91 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7A379AA01C508ED600D5DA91 /* background.jpg */; };
 		7A4773541C4C9CDA00BF80DA /* EditOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4773531C4C9CDA00BF80DA /* EditOptionsViewController.swift */; };
@@ -25,6 +27,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7A20381B1CA34E1400292247 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		7A20381E1CA34F3100292247 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		7A379A9E1C508CA500D5DA91 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		7A379AA01C508ED600D5DA91 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
 		7A4773531C4C9CDA00BF80DA /* EditOptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditOptionsViewController.swift; sourceTree = "<group>"; };
@@ -85,6 +89,8 @@
 		7A776C371C5707DD00C9AC41 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				7A20381B1CA34E1400292247 /* CoreDataStack.swift */,
+				7A20381D1CA34F3100292247 /* Model.xcdatamodeld */,
 				7AAFBDA31C4AFEF300AA906B /* MemeObject.swift */,
 				7A776C081C5471D600C9AC41 /* Memes.swift */,
 			);
@@ -210,6 +216,7 @@
 				7AAFBDA41C4AFEF300AA906B /* MemeObject.swift in Sources */,
 				7A776C0D1C55700200C9AC41 /* SentMemesTableViewController.swift in Sources */,
 				7AAFBD941C4A89DC00AA906B /* MemeEditorController.swift in Sources */,
+				7A20381C1CA34E1400292247 /* CoreDataStack.swift in Sources */,
 				7A776C111C5570EA00C9AC41 /* MemeCollectionViewCell.swift in Sources */,
 				7A776C3A1C59C36800C9AC41 /* Functions.swift in Sources */,
 				7A776C091C5471D600C9AC41 /* Memes.swift in Sources */,
@@ -217,6 +224,7 @@
 				7AAFBD921C4A89DC00AA906B /* AppDelegate.swift in Sources */,
 				7A776C331C55AFDD00C9AC41 /* MemeTableViewCell.swift in Sources */,
 				7A776C0F1C55701E00C9AC41 /* SentMemesCollectionViewController.swift in Sources */,
+				7A20381F1CA34F3100292247 /* Model.xcdatamodeld in Sources */,
 				7A4773541C4C9CDA00BF80DA /* EditOptionsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -362,6 +370,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		7A20381D1CA34F3100292247 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				7A20381E1CA34F3100292247 /* Model.xcdatamodel */,
+			);
+			currentVersion = 7A20381E1CA34F3100292247 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 7AAFBD861C4A89DC00AA906B /* Project object */;
 }
