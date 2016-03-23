@@ -111,6 +111,8 @@ class SentMemesTableViewController: UIViewController, UITableViewDelegate, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let context = CoreDataStack.sharedIntance.managedObjectContect
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: "addMeme")
         navigationItem.leftBarButtonItem = editButtonItem()
         
