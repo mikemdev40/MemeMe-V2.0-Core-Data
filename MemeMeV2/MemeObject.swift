@@ -38,6 +38,11 @@ class MemeObject: NSManagedObject {
         return nil
     }
     
+    //required standard init required for loading data from core data on startup
+    override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertIntoManagedObjectContext: context)
+    }
+    
     //updated initializer to take an NSManagedContext and call the superclass initializer
     init(topText: String, bottomText: String, originalImage: NSData, memedImage: NSData, date: NSDate, context: NSManagedObjectContext) {
         
