@@ -20,12 +20,10 @@ class CoreDataStack {
         guard let modelURL = NSBundle.mainBundle().URLForResource("Model", withExtension: "momd") else {
             fatalError("Error loading the model from the bundle")
         }
-        print("init model URL from bundle")
         
         guard let managedObjectModel = NSManagedObjectModel(contentsOfURL: modelURL) else {
             fatalError("Error initializing the managed object model")
         }
-        print("init object model")
         
         let persistentCoordinator = NSPersistentStoreCoordinator(managedObjectModel: managedObjectModel)
         
@@ -37,7 +35,6 @@ class CoreDataStack {
         
         do {
             try persistentCoordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: urlForSQLDB, options: nil)
-            print("init persistent coordinator")
         } catch {
             fatalError("Error adding persistent store")
         }
