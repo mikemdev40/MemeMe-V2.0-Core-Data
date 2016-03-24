@@ -31,6 +31,17 @@ class SentMemesTableViewController: UIViewController, UITableViewDelegate, UITab
         performSegueWithIdentifier("showMemeEditorFromTable", sender: nil)
     }
     
+    func loadAllMemes() -> [MemeObject] {
+        let fetchRequest = NSFetchRequest(entityName: "MemeObject")
+        
+        do {
+            return try sharedContext.executeFetchRequest(fetchRequest) as! [MemeObject]
+        } catch let error as NSError {
+            callAlert("Error loading memes from disk", message: error.localizedDescription, handler: nil)
+            return [MemeObject]()
+        }
+    }
+    
     ///this method creates an alert with a specific title, message, and completion handler (as a note, the only time a completion handler is provided is when the user selects an activity from the share meme menu; in this casae the "OK" button then leads to a dismissal of the meme editor)
     func callAlert(title: String, message: String, handler: ((UIAlertAction) -> Void)?) {
         let ac = UIAlertController(title: title, message: message, preferredStyle: .Alert)
@@ -120,18 +131,11 @@ class SentMemesTableViewController: UIViewController, UITableViewDelegate, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let context = CoreDataStack.sharedInstance.managedObjectContect
-        
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: "addMeme")
         navigationItem.leftBarButtonItem = editButtonItem()
         
-        //loads the shared memes array from memes that are saved to the file disk (these memes are saved as part of the saveMeme method in the meme editor)
-        
-//TODO: Remove archiver stuff below and replace with core data
-        
-        //if let memes = NSKeyedUnarchiver.unarchiveObjectWithFile(getMemeFilePath()) as? [MemeObject] {
-        //    Memes.sharedInstance.savedMemes = memes
-        //}
+        //sets the shared memes array to the array of memes that are returned from the persistent core data stack when loaded
+        Memes.sharedInstance.savedMemes = loadAllMemes()
         
         //sets title to "" sets both navigation bar title AND tab bar title to ""; subsequently setting navigationItem's title to "Sent Memes" allowed just this title to be shown in the navigation bar (and not under the tab bar icon)
         title = ""
