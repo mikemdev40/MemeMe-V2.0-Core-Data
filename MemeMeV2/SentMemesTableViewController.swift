@@ -31,8 +31,15 @@ class SentMemesTableViewController: UIViewController, UITableViewDelegate, UITab
         performSegueWithIdentifier("showMemeEditorFromTable", sender: nil)
     }
     
+    ///this method was added as part of the core data conversion, and retrieves all memes from the persistent store for initial loading
     func loadAllMemes() -> [MemeObject] {
+        
         let fetchRequest = NSFetchRequest(entityName: "MemeObject")
+        
+        //sort descriptor added below to the fetch request in order to ensure that the memes are returned with the newest meme on TOP of the table (without this sort descriptor, the memes appear to return with newest at the bottom, which is equivaleqnt to a sort on "date" with ascending = true); my references for sort descriptors: https://www.hackingwithswift.com/read/38/5/loading-core-data-objects-using-nsfetchrequest-and-nssortdescrip and https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CoreData/nsfetchedresultscontroller.html#//apple_ref/doc/uid/TP40001075-CH8-SW1
+        
+        let sortByDate = NSSortDescriptor(key: "date", ascending: false)
+        fetchRequest.sortDescriptors = [sortByDate]
         
         do {
             return try sharedContext.executeFetchRequest(fetchRequest) as! [MemeObject]
