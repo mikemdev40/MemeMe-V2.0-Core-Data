@@ -8,6 +8,7 @@
 
 import UIKit
 import MobileCoreServices
+import CoreData
 
 //note the adoption of the UpdateFontDelegate protocol below, which is defined in the EditOptionsViewController class and adopted by this MemeEditorController class; delegation is used in this application for the purpose of enabling the user to change the font of the meme from a popover view controller, and have the font change immediately reflected on the main view controller screen
 class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIPopoverPresentationControllerDelegate, UpdateFontDelegate {
@@ -38,6 +39,11 @@ class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, U
     var memeToEdit: MemeObject?
     let notificationCenter = NSNotificationCenter.defaultCenter()
 
+    //added convenience property for quickly accessing shared core data context
+    var sharedContext: NSManagedObjectContext {
+        return CoreDataStack.sharedInstance.managedObjectContect
+    }
+    
     //variable for the font of the textfields, which, when set to a different value, causes the textfields to update through the didset property observer's call of setText (which set the text field attributes)
     var memeFont = Constants.defaultFont {
         didSet {
@@ -140,31 +146,26 @@ class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, U
         }
     }
     
-    ///this method writes the both the original and memed images to disk as JPEGs, saves the memed imaged (and original image and text) to an instance of the archivable type MemeObject, then update the singleton [MemeObject] instance (which is shared across view controllers) by appending the new meme object and saves the shared [MemeObject] to disk using NSKeyedArchiver
+    ///this method writes the both the original and memed images to disk as JPEGs, generates a new meme, then saves the meme to the shared array and also persisted in the Core Data persistent store
     func saveMeme(topText: String, bottomText: String, originalImage: UIImage, memedImage: UIImage, date: NSDate) {
-        let manager = NSFileManager.defaultManager()
-        if let documentsPath = manager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first {
-            var randomFileName = NSUUID().UUIDString
-            
-            let originalImagePath = randomFileName
-            let originalImagePathURL = documentsPath.URLByAppendingPathComponent(originalImagePath)
-            if let originalImageData = UIImageJPEGRepresentation(originalImage, 1.0) {
-                originalImageData.writeToURL(originalImagePathURL, atomically: true)
-            }
-            
-            randomFileName = NSUUID().UUIDString
-            
-            let memedImagePath = randomFileName
-            let memedImagePathURL = documentsPath.URLByAppendingPathComponent(memedImagePath)
-            if let memedImageData = UIImageJPEGRepresentation(memedImage, 1.0) {
-                memedImageData.writeToURL(memedImagePathURL, atomically: true)
-            }
+        
+        guard let originalImageData = UIImageJPEGRepresentation(originalImage, 1.0) else {
+            callAlert("Error", message: "Error saving original image", handler: nil)
+            return
+        }
+        
+        guard let memedImageData = UIImageJPEGRepresentation(memedImage, 1.0) else {
+            callAlert("Error", message: "Error saving memed image", handler: nil)
+            return
+        }
+        
+        meme = MemeObject(topText: topText, bottomText: bottomText, originalImage: originalImageData, memedImage: memedImageData, date: date, context: sharedContext)
+        Memes.sharedInstance.savedMemes.insert(meme, atIndex: 0)
 
-            meme = MemeObject(topText: topText, bottomText: bottomText, originalImagePath: originalImagePath, memedImagePath: memedImagePath, date: date)
-            Memes.sharedInstance.savedMemes.insert(meme, atIndex: 0)
-
-    //TODO: Remove archiver stuff below and replace with core data
-            //NSKeyedArchiver.archiveRootObject(Memes.sharedInstance.savedMemes, toFile: getMemeFilePath())
+        do {
+            try sharedContext.save()
+        } catch let error as NSError {
+            callAlert("Error saving to disk", message: error.localizedDescription, handler: nil)
         }
     }
     //my primary references for storing files to the local disk was lecture 16 of the Stanford iTunes Course (https://itunes.apple.com/us/course/developing-ios-8-apps-swift/id961180099) and https://www.hackingwithswift.com/read/10/4/importing-photos-with-uiimagepickercontroller

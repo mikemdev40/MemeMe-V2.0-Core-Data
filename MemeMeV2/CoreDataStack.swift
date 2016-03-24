@@ -11,7 +11,7 @@ import CoreData
 
 class CoreDataStack {
     
-    static let sharedIntance = CoreDataStack()
+    static let sharedInstance = CoreDataStack()
     
     lazy var managedObjectContect: NSManagedObjectContext = {
         

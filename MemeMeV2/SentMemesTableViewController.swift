@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class SentMemesTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -18,11 +19,23 @@ class SentMemesTableViewController: UIViewController, UITableViewDelegate, UITab
             tableView.dataSource = self
         }
     }
+    //MARK: PROPERTIES
+    //added convenience property for quickly accessing shared core data context
+    var sharedContext: NSManagedObjectContext {
+        return CoreDataStack.sharedInstance.managedObjectContect
+    }
     
     //MARK: CUSTOM METHODS
     ///this method is the action attached to the "+" button in the navigation bar and causes a segue to occur (prepareForSegue is invoked here, but because the destination view controller doesn't need to be set up when adding a new meme, no setup specific to the "showMemeEditorFromTable" segue identifier occurs in the prepareForSegue call)
     func addMeme() {
         performSegueWithIdentifier("showMemeEditorFromTable", sender: nil)
+    }
+    
+    ///this method creates an alert with a specific title, message, and completion handler (as a note, the only time a completion handler is provided is when the user selects an activity from the share meme menu; in this casae the "OK" button then leads to a dismissal of the meme editor)
+    func callAlert(title: String, message: String, handler: ((UIAlertAction) -> Void)?) {
+        let ac = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: handler))
+        presentViewController(ac, animated: true, completion: nil)
     }
     
     //MARK: DELEGTE METHODS
@@ -57,27 +70,22 @@ class SentMemesTableViewController: UIViewController, UITableViewDelegate, UITab
             
             //deletes the two images (original and memed) from the file disk
             let memeToDelete = Memes.sharedInstance.savedMemes[indexPath.row]
-            let manager = NSFileManager.defaultManager()
-            if let documentsPath = manager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first {
-                let originalImagePathURL = documentsPath.URLByAppendingPathComponent(memeToDelete.originalImagePath)
-                let memedImagePathURL = documentsPath.URLByAppendingPathComponent(memeToDelete.memedImagePath)
-                do {
-                    try manager.removeItemAtURL(originalImagePathURL)
-                    try manager.removeItemAtURL(memedImagePathURL)
-                } catch let error as NSError {
-                    print(error.description)
-                }
-            }
+            
+            //deletes the meme from the context
+            sharedContext.deleteObject(memeToDelete)
             
             //deletes the meme from the shared Memes [MemeObject] array
             Memes.sharedInstance.savedMemes.removeAtIndex(indexPath.row)
             
-            //deletes the row from the table
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-            
-            //updates the saved memes array on the file disk
-//TODO: Remove archiver stuff below and replace with core data
-            //NSKeyedArchiver.archiveRootObject(Memes.sharedInstance.savedMemes, toFile: getMemeFilePath())
+            do {
+                //saves the deletion
+                try sharedContext.save()
+                
+                //deletes the row from the table, which only occurs if the save to disk is successful (i.e. does not thrown an error)
+                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            } catch let error as NSError {
+                callAlert("Error deleting meme from disk", message: error.localizedDescription, handler: nil)
+            }
         }
     }
     
@@ -112,7 +120,7 @@ class SentMemesTableViewController: UIViewController, UITableViewDelegate, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let context = CoreDataStack.sharedIntance.managedObjectContect
+        let context = CoreDataStack.sharedInstance.managedObjectContect
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: "addMeme")
         navigationItem.leftBarButtonItem = editButtonItem()
