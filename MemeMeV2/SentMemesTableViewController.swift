@@ -88,6 +88,17 @@ class SentMemesTableViewController: UIViewController, UITableViewDelegate, UITab
             
             //deletes the two images (original and memed) from the file disk
             let memeToDelete = Memes.sharedInstance.savedMemes[indexPath.row]
+            let manager = NSFileManager.defaultManager()
+            if let documentsPath = manager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first {
+                let originalImagePathURL = documentsPath.URLByAppendingPathComponent(memeToDelete.originalImagePath)
+                let memedImagePathURL = documentsPath.URLByAppendingPathComponent(memeToDelete.memedImagePath)
+                do {
+                    try manager.removeItemAtURL(originalImagePathURL)
+                    try manager.removeItemAtURL(memedImagePathURL)
+                } catch let error as NSError {
+                    print(error.description)
+                }
+            }
             
             //deletes the meme from the context
             sharedContext.deleteObject(memeToDelete)

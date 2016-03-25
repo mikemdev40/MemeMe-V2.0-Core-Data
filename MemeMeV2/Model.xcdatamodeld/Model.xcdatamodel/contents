@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10137.1" systemVersion="15B42" minimumToolsVersion="Xcode 7.0">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15E65" minimumToolsVersion="Xcode 7.0">
     <entity name="MemeObject" representedClassName=".MemeObject" syncable="YES">
         <attribute name="bottomText" attributeType="String" syncable="YES"/>
         <attribute name="date" attributeType="Date" syncable="YES"/>
-        <attribute name="memedImage" attributeType="Binary" syncable="YES"/>
-        <attribute name="originalImage" attributeType="Binary" syncable="YES"/>
+        <attribute name="memedImagePath" attributeType="String" syncable="YES"/>
+        <attribute name="originalImagePath" attributeType="String" syncable="YES"/>
         <attribute name="topText" attributeType="String" syncable="YES"/>
     </entity>
     <elements>

@@ -23,17 +23,29 @@ class MemeObject: NSManagedObject {
     @NSManaged var topText: String
     @NSManaged var bottomText: String
     @NSManaged var date: NSDate
+    @NSManaged var originalImagePath: String
+    @NSManaged var memedImagePath: String
     
-    //updated two variables below from originalImagePath and memedImagePath strings that held locations to saved files in the documents directory to the NSData type to persist the image data in core data
-    @NSManaged var originalImage: NSData
-    @NSManaged var memedImage: NSData
-    
-    ///this class method is used to return a UIImage associated with the NSData saved to disk (this method was updated to work with core data)
+    ///this class method is used to locate and return the original and memed images from the file disk using the documents directory and the randomly generated path strings for the image file paths when the meme is created in the meme editor; the ImageType is used to simplify the call to this method so that it is clear which version of the image is being requested; the table view and collection view controllers call this method with the "Memed" type when setting up their cells, since they want to display the saved memes, whereas the "Original" type is used solely when the "Create New From" button is tapped in the meme viewer, which segues to the meme editor and loads the original version of the image into the imageview.
     func getImage(type: ImageType) -> UIImage? {
         if type == .Original {
-            return UIImage(data: originalImage)
+            return retrieveImage(originalImagePath)
         } else if type == .Memed {
-            return UIImage(data: memedImage)
+            return retrieveImage(memedImagePath)
+        }
+        return nil
+    }
+    
+    ///this private method is called by the getImage above and returns the actual image from the file disk to the getImage function (it exists as a separate method from getImage to reduce redundant code)
+    private func retrieveImage(path: String) -> UIImage? {
+        let manager = NSFileManager.defaultManager()
+        if let documentsPath = manager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first {
+            let memeFilePath = documentsPath.URLByAppendingPathComponent(path)
+            if let imageData = NSData(contentsOfURL: memeFilePath) {
+                if let image = UIImage(data: imageData) {
+                    return image
+                }
+            }
         }
         return nil
     }
@@ -44,15 +56,15 @@ class MemeObject: NSManagedObject {
     }
     
     //updated initializer to take an NSManagedContext and call the superclass initializer
-    init(topText: String, bottomText: String, originalImage: NSData, memedImage: NSData, date: NSDate, context: NSManagedObjectContext) {
+    init(topText: String, bottomText: String, originalImagePath: String, memedImagePath: String, date: NSDate, context: NSManagedObjectContext) {
         
         let entity = NSEntityDescription.entityForName("MemeObject", inManagedObjectContext: context)!
         super.init(entity: entity, insertIntoManagedObjectContext: context)
         
         self.topText = topText
         self.bottomText = bottomText
-        self.originalImage = originalImage
-        self.memedImage = memedImage
+        self.originalImagePath = originalImagePath
+        self.memedImagePath = memedImagePath
         self.date = date
     }
 }

@@ -149,25 +149,39 @@ class MemeEditorController: UIViewController, UIImagePickerControllerDelegate, U
     ///this method writes the both the original and memed images to disk as JPEGs, generates a new meme, then saves the meme to the shared array and also persisted in the Core Data persistent store
     func saveMeme(topText: String, bottomText: String, originalImage: UIImage, memedImage: UIImage, date: NSDate) {
         
-        guard let originalImageData = UIImageJPEGRepresentation(originalImage, 1.0) else {
-            callAlert("Error", message: "Error saving original image", handler: nil)
-            return
-        }
-        
-        guard let memedImageData = UIImageJPEGRepresentation(memedImage, 1.0) else {
-            callAlert("Error", message: "Error saving memed image", handler: nil)
-            return
-        }
-        
-        meme = MemeObject(topText: topText, bottomText: bottomText, originalImage: originalImageData, memedImage: memedImageData, date: date, context: sharedContext)
-        Memes.sharedInstance.savedMemes.insert(meme, atIndex: 0)
-
-        do {
-            try sharedContext.save()
-        } catch let error as NSError {
-            callAlert("Error saving to disk", message: error.localizedDescription, handler: nil)
+        let manager = NSFileManager.defaultManager()
+        if let documentsPath = manager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first {
+            
+            var randomFileName = NSUUID().UUIDString
+            
+            let originalImagePath = "\(randomFileName).jpg"
+            let originalImagePathURL = documentsPath.URLByAppendingPathComponent(originalImagePath)
+            guard let originalImageData = UIImageJPEGRepresentation(originalImage, 1.0) else {
+                callAlert("Error", message: "Error saving original image", handler: nil)
+                return
+            }
+            originalImageData.writeToURL(originalImagePathURL, atomically: true)
+            
+            randomFileName = NSUUID().UUIDString
+            let memedImagePath = "\(randomFileName).jpg"
+            let memedImagePathURL = documentsPath.URLByAppendingPathComponent(memedImagePath)
+            guard let memedImageData = UIImageJPEGRepresentation(memedImage, 1.0) else {
+                callAlert("Error", message: "Error saving memed image", handler: nil)
+                return
+            }
+            memedImageData.writeToURL(memedImagePathURL, atomically: true)
+            
+            meme = MemeObject(topText: topText, bottomText: bottomText, originalImagePath: originalImagePath, memedImagePath: memedImagePath, date: date, context: sharedContext)
+            Memes.sharedInstance.savedMemes.insert(meme, atIndex: 0)
+            
+            do {
+                try sharedContext.save()
+            } catch let error as NSError {
+                callAlert("Error saving to disk", message: error.localizedDescription, handler: nil)
+            }
         }
     }
+
     //my primary references for storing files to the local disk was lecture 16 of the Stanford iTunes Course (https://itunes.apple.com/us/course/developing-ios-8-apps-swift/id961180099) and https://www.hackingwithswift.com/read/10/4/importing-photos-with-uiimagepickercontroller
     
     
