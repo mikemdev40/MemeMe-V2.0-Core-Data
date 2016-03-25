@@ -47,7 +47,7 @@ class SentMemesTableViewController: UIViewController, UITableViewDelegate, UITab
             callAlert("Error loading memes from disk", message: error.localizedDescription, handler: nil)
             return [MemeObject]()
         }
-    }
+            }
     
     ///this method creates an alert with a specific title, message, and completion handler (as a note, the only time a completion handler is provided is when the user selects an activity from the share meme menu; in this casae the "OK" button then leads to a dismissal of the meme editor)
     func callAlert(title: String, message: String, handler: ((UIAlertAction) -> Void)?) {
@@ -138,7 +138,7 @@ class SentMemesTableViewController: UIViewController, UITableViewDelegate, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: "addMeme")
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: #selector(SentMemesTableViewController.addMeme))
         navigationItem.leftBarButtonItem = editButtonItem()
         
         //sets the shared memes array to the array of memes that are returned from the persistent core data stack when loaded
